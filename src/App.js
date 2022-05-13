@@ -1,25 +1,31 @@
-import logo from './logo.svg';
-import './App.css';
+import React, { useState, useEffect } from 'react'
+import ListaTareas from './ListaTareas'
+import Formulario from './Formulario'
+import axios from "axios";
 
-function App() {
+
+const App = () => {
+
+  const [tareas, settarea] = useState([]);
+
+  const getData = async () => {
+    const res = await axios.get("http://localhost:1337/api/tareas")
+    settarea(res.data.data)
+  }
+
+  useEffect(() => {
+    getData()
+  }, [])
+
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
-  );
+    
+      <div className="flex flex-col items-center space-y-5" >
+        <h1 className="mt-10">Lista de Tareas</h1>
+        <Formulario tareas={tareas} settarea={settarea} getData={getData} />
+        <ListaTareas tareas={tareas} settarea={settarea} getData={getData} />
+      </div>
+    
+  )
 }
 
-export default App;
+export default App
